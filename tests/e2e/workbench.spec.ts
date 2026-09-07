@@ -101,7 +101,14 @@ test('recorded SDK trace loads, diagnoses, and clears', async ({ page }) => {
 test('local file imports make no upload requests', async ({ page }) => {
   const posted: string[] = [];
   page.on('request', (request) => {
-    if (request.method() !== 'GET') posted.push(request.url());
+    const url = new URL(request.url());
+    // Sites can inject Cloudflare's documented challenge script. Its hosting
+    // traffic is independent of this app; no application upload is allowed.
+    const hostingChallenge =
+      url.origin === new URL(page.url()).origin &&
+      url.pathname.startsWith('/cdn-cgi/challenge-platform/');
+    if (request.method() !== 'GET' && !hostingChallenge)
+      posted.push(request.url());
   });
   await page.getByLabel('Import trace or experiment').setInputFiles({
     name: 'trace.json',
@@ -255,13 +262,11 @@ test('newer imports and clearing invalidate a delayed example load', async ({
   ).toBeDisabled();
   const trace = JSON.parse(source.toString());
   trace.name = 'User trace selected last';
-  await page
-    .getByLabel('Import trace or experiment')
-    .setInputFiles({
-      name: 'last.json',
-      mimeType: 'application/json',
-      buffer: Buffer.from(JSON.stringify(trace)),
-    });
+  await page.getByLabel('Import trace or experiment').setInputFiles({
+    name: 'last.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify(trace)),
+  });
   await expect(page.getByRole('heading', { name: trace.name })).toBeVisible();
   release();
   await page.waitForLoadState('networkidle');
@@ -300,13 +305,11 @@ test('long valid trace names wrap without expanding the page', async ({
       effect: 'none',
     })),
   };
-  await page
-    .getByLabel('Import trace or experiment')
-    .setInputFiles({
-      name: 'long.json',
-      mimeType: 'application/json',
-      buffer: Buffer.from(JSON.stringify(trace)),
-    });
+  await page.getByLabel('Import trace or experiment').setInputFiles({
+    name: 'long.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify(trace)),
+  });
   await expect(
     page.getByRole('heading', {
       name: 'Repeated failures in ' + 'T'.repeat(160),
@@ -511,13 +514,11 @@ test('recorded faults are counted even when a manual trace labels the call OK', 
       },
     ],
   };
-  await page
-    .getByLabel('Import trace or experiment')
-    .setInputFiles({
-      name: 'fault.json',
-      mimeType: 'application/json',
-      buffer: Buffer.from(JSON.stringify(trace)),
-    });
+  await page.getByLabel('Import trace or experiment').setInputFiles({
+    name: 'fault.json',
+    mimeType: 'application/json',
+    buffer: Buffer.from(JSON.stringify(trace)),
+  });
   await expect(
     page
       .locator('.trace-metrics .metric')
@@ -634,4 +635,19 @@ test('documentation commands copy exactly and report clipboard failure clearly',
       'Clipboard access is unavailable. Select the commands below to copy them.',
     ),
   ).toBeVisible();
+});
+
+test('local traces import with the network offline', async ({
+  page,
+  context,
+}) => {
+  await context.setOffline(true);
+  await page.getByLabel('Import trace or experiment').setInputFiles({
+    name: 'offline-trace.json',
+    mimeType: 'application/json',
+    buffer: source,
+  });
+  await expect(page.locator('.trace-table tbody tr')).toHaveCount(4);
+  await page.getByRole('button', { name: /2 related events/ }).click();
+  await expect(page.locator('.trace-table tbody tr')).toHaveCount(2);
 });

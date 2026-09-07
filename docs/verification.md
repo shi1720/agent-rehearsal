@@ -47,7 +47,12 @@ The original 1.0.0 release candidate passed 60 TypeScript tests, 31 Python tests
 
 The 1.1.0 browser release adds regressions for delayed requests, clearing pending imports, long metadata, advanced controls, resize recovery, keyboard navigation, selected-trial reports/shares, manual fault counting, scaled waits, mobile call selection, command copying, and clipboard/network failure recovery. The engine’s golden aggregate and Python SDK version remain unchanged.
 
-Local validation passed **61 TypeScript tests, 31 Python tests, and 56 browser checks** (28 workflows across desktop and mobile Chromium). Strict types, first-party lint, golden aggregate, model-specific CLI gates, production Worker build, and the dependency audit also passed. The review findings and subjective design rubric are recorded in [review-log.md](./review-log.md).
+Release validation passed **61 TypeScript tests, 31 Python tests, and 58 browser checks** (29 workflows across desktop and mobile Chromium). Strict types, first-party lint, golden aggregate, model-specific CLI gates, production Worker build, and the dependency audit also passed. The review findings and subjective design rubric are recorded in [review-log.md](./review-log.md).
 
 
-The same 56 browser checks also passed against the built Worker in Wrangler’s local production runtime. Separate Firefox and WebKit smoke checks passed simulation, mobile call selection, trace import, finding filters, documentation, and offline simulation, with no page errors. These are smoke checks, not the complete Chromium suite. The published GitHub workflow records the checks for each pushed commit.
+The same 56 pre-publication browser checks also passed against the built Worker in Wrangler’s local production runtime. Separate Firefox and WebKit smoke checks passed simulation, mobile call selection, trace import, finding filters, documentation, and offline simulation, with no page errors. These are smoke checks, not the complete Chromium suite. The published GitHub workflow records the checks for each pushed commit.
+
+
+During live validation, Cloudflare's hosting-layer challenge request triggered the original catch-all upload assertion. The test now excludes only same-origin `/cdn-cgi/challenge-platform/` requests, the documented [Cloudflare JavaScript Detections](https://developers.cloudflare.com/cloudflare-challenges/challenge-types/javascript-detections/) namespace, while still rejecting other non-GET requests during import. An additional desktop/mobile test imports and filters a trace with the network offline. Hosting-layer traffic is not a claim that the website is network-silent; the application does not upload imported traces.
+
+The final public-site suite passed all 58 desktop/mobile checks, including offline trace import.

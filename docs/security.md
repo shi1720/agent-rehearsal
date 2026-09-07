@@ -29,3 +29,8 @@ The web dependency lockfile is committed. The shipped dependencies were upgraded
 ## Reporting
 
 Use GitHub's private vulnerability reporting for this repository when available. Do not include live credentials or private traces in public issues. Report the minimum reproduction with synthetic data, affected version, and the expected versus observed behavior. No response-time SLA is promised for this independent open-source project.
+
+
+### Hosting-layer requests
+
+The public demo is served through Sites and Cloudflare. Page delivery can include hosting-layer bot detection under `/cdn-cgi/challenge-platform/`, as described in [Cloudflare's JavaScript Detections documentation](https://developers.cloudflare.com/cloudflare-challenges/challenge-types/javascript-detections/). The application itself has no trace-upload endpoint and imports work with the network offline. Local trace analysis does not mean that loading the hosted website produces no network traffic.

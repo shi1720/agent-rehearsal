@@ -52,3 +52,6 @@ The visual review covered desktop/mobile screenshots of the simulator, inspector
 | Guide had an undefined sandbox object | Executable checkout and installation commands, copy controls, explicit shell guidance | Browser clipboard success/failure checks; checkout example |
 
 The final focused implementation review found no remaining issues in the reviewed changes. Existing engine semantics and Python SDK behavior remain unchanged. Accessibility checks are automated and supplemented with keyboard/screenshot review; they do not replace assistive-technology or representative-user testing.
+
+
+Live validation also separated Cloudflare challenge traffic from application upload attempts. The regression permits only the documented same-origin challenge namespace and adds offline import/filter tests. This corrects a test boundary; application trace processing was already local.
