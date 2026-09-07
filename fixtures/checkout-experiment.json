@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "scenarioId": "checkout",
+  "seed": 1720,
+  "trials": 250,
+  "faultRate": 0.35,
+  "candidate": {
+    "id": "candidate",
+    "name": "Guarded retry",
+    "maxAttempts": 3,
+    "backoffMs": 600,
+    "timeoutMs": 1500,
+    "budgetMs": 15000,
+    "validateOutput": true,
+    "honorRetryAfter": true,
+    "useIdempotency": true,
+    "retryPermanent": false,
+    "retryAmbiguous": false
+  }
+}

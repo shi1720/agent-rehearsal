@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-rehearsal"
+version = "1.0.0"
+description = "Metadata-only tool recording and explicit fault injection for agent reliability tests"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{name = "Shivam Gupta"}]
+keywords = ["agents", "testing", "chaos-engineering", "fault-injection"]
+classifiers = ["Programming Language :: Python :: 3", "Operating System :: OS Independent"]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/shi1720/agent-rehearsal"
+Documentation = "https://github.com/shi1720/agent-rehearsal/tree/main/docs"
+Issues = "https://github.com/shi1720/agent-rehearsal/issues"
+
+[project.scripts]
+rehearsal = "rehearsal.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

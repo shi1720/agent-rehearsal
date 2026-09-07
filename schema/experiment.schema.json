@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/shi1720/agent-rehearsal/main/schema/experiment.schema.json",
+  "title": "Agent Rehearsal experiment v1",
+  "type": "object",
+  "required": [
+    "version",
+    "scenarioId",
+    "seed",
+    "trials",
+    "faultRate",
+    "candidate"
+  ],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "scenarioId": {
+      "enum": [
+        "checkout",
+        "research",
+        "devops"
+      ]
+    },
+    "seed": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4294967295
+    },
+    "trials": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "faultRate": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "candidate": {
+      "type": "object",
+      "required": [
+        "maxAttempts",
+        "backoffMs",
+        "timeoutMs",
+        "budgetMs",
+        "validateOutput",
+        "honorRetryAfter",
+        "useIdempotency",
+        "retryPermanent",
+        "retryAmbiguous"
+      ],
+      "properties": {
+        "id": {
+          "const": "candidate"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^[^\\u0000-\\u001f]+$"
+        },
+        "maxAttempts": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 6
+        },
+        "backoffMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5000
+        },
+        "timeoutMs": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 10000
+        },
+        "budgetMs": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 60000
+        },
+        "validateOutput": {
+          "type": "boolean"
+        },
+        "honorRetryAfter": {
+          "type": "boolean"
+        },
+        "useIdempotency": {
+          "type": "boolean"
+        },
+        "retryPermanent": {
+          "type": "boolean"
+        },
+        "retryAmbiguous": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "additionalProperties": true
+}

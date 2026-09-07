@@ -1,0 +1,42 @@
+[
+  {
+    "seed": 0,
+    "trial": 0,
+    "step": "search",
+    "attempt": 1,
+    "channel": "fault",
+    "expected": 0.48250956693664193
+  },
+  {
+    "seed": 1720,
+    "trial": 20,
+    "step": "payment",
+    "attempt": 2,
+    "channel": "fault",
+    "expected": 0.44868314755149186
+  },
+  {
+    "seed": 4294967295,
+    "trial": 999,
+    "step": "检索",
+    "attempt": 6,
+    "channel": "jitter",
+    "expected": 0.051726861856877804
+  },
+  {
+    "seed": 42,
+    "trial": 1,
+    "step": "café",
+    "attempt": 3,
+    "channel": "fault",
+    "expected": 0.924654403468594
+  },
+  {
+    "seed": 219,
+    "trial": 0,
+    "step": "search",
+    "attempt": 6,
+    "channel": "fault",
+    "expected": 0.7890845017973334
+  }
+]

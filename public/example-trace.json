@@ -1,0 +1,53 @@
+{
+  "schemaVersion": 1,
+  "name": "Checkout: a payment succeeded, then timed out",
+  "source": "python-sdk",
+  "events": [
+    {
+      "id": "call-00001",
+      "tool": "blind.payments.charge",
+      "kind": "write",
+      "attempt": 1,
+      "startMs": 0.016,
+      "durationMs": 0.004,
+      "status": "injected",
+      "fault": "timeout_after_write",
+      "effect": "unknown",
+      "errorType": "TimeoutError"
+    },
+    {
+      "id": "call-00002",
+      "tool": "blind.payments.charge",
+      "kind": "write",
+      "attempt": 1,
+      "startMs": 0.026,
+      "durationMs": 0.005,
+      "status": "ok",
+      "fault": "none",
+      "effect": "committed"
+    },
+    {
+      "id": "call-00003",
+      "tool": "guarded.payments.charge",
+      "kind": "write",
+      "attempt": 1,
+      "startMs": 0.045,
+      "durationMs": 0.002,
+      "status": "injected",
+      "fault": "timeout_after_write",
+      "effect": "unknown",
+      "errorType": "TimeoutError"
+    },
+    {
+      "id": "call-00004",
+      "tool": "guarded.payments.charge",
+      "kind": "write",
+      "attempt": 1,
+      "startMs": 0.055,
+      "durationMs": 0.003,
+      "status": "ok",
+      "fault": "none",
+      "effect": "committed"
+    }
+  ]
+}

@@ -1,0 +1,180 @@
+import type { Policy, Scenario, Experiment } from './types';
+export const SCENARIOS: Scenario[] = [
+  {
+    id: 'checkout',
+    name: 'The double-charge trap',
+    eyebrow: 'COMMERCE AGENT',
+    icon: 'credit',
+    description:
+      'A payment succeeds. The response disappears. Does your agent charge the customer again?',
+    steps: [
+      {
+        id: 'search',
+        name: 'catalog.search',
+        kind: 'read',
+        latencyMs: 180,
+        costMicros: 120,
+        fault: 'rate_limit',
+        supportsIdempotency: false,
+      },
+      {
+        id: 'inventory',
+        name: 'inventory.check',
+        kind: 'read',
+        latencyMs: 240,
+        costMicros: 80,
+        fault: 'timeout_before',
+        supportsIdempotency: false,
+      },
+      {
+        id: 'payment',
+        name: 'payments.charge',
+        kind: 'write',
+        latencyMs: 320,
+        costMicros: 300,
+        fault: 'timeout_after_write',
+        supportsIdempotency: true,
+      },
+      {
+        id: 'receipt',
+        name: 'receipt.render',
+        kind: 'read',
+        latencyMs: 160,
+        costMicros: 100,
+        fault: 'malformed',
+        supportsIdempotency: false,
+      },
+    ],
+  },
+  {
+    id: 'research',
+    name: 'The confident wrong answer',
+    eyebrow: 'RESEARCH AGENT',
+    icon: 'search',
+    description:
+      'Search gets throttled and extraction returns malformed data. A green finish can still be wrong.',
+    steps: [
+      {
+        id: 'search',
+        name: 'web.search',
+        kind: 'read',
+        latencyMs: 250,
+        costMicros: 800,
+        fault: 'rate_limit',
+        supportsIdempotency: false,
+      },
+      {
+        id: 'fetch',
+        name: 'page.fetch',
+        kind: 'read',
+        latencyMs: 600,
+        costMicros: 100,
+        fault: 'timeout_before',
+        supportsIdempotency: false,
+      },
+      {
+        id: 'extract',
+        name: 'facts.extract',
+        kind: 'read',
+        latencyMs: 400,
+        costMicros: 600,
+        fault: 'malformed',
+        supportsIdempotency: false,
+      },
+      {
+        id: 'check',
+        name: 'citations.verify',
+        kind: 'read',
+        latencyMs: 150,
+        costMicros: 200,
+        fault: 'none',
+        supportsIdempotency: false,
+      },
+    ],
+  },
+  {
+    id: 'devops',
+    name: 'The incident that loops',
+    eyebrow: 'ON-CALL AGENT',
+    icon: 'terminal',
+    description:
+      'A revoked credential is not a temporary outage. Repeating the same call burns the incident budget.',
+    steps: [
+      {
+        id: 'logs',
+        name: 'logs.query',
+        kind: 'read',
+        latencyMs: 220,
+        costMicros: 300,
+        fault: 'rate_limit',
+        supportsIdempotency: false,
+      },
+      {
+        id: 'metrics',
+        name: 'metrics.fetch',
+        kind: 'read',
+        latencyMs: 180,
+        costMicros: 200,
+        fault: 'timeout_before',
+        supportsIdempotency: false,
+      },
+      {
+        id: 'deploy',
+        name: 'deploy.inspect',
+        kind: 'read',
+        latencyMs: 300,
+        costMicros: 100,
+        fault: 'permanent',
+        supportsIdempotency: false,
+      },
+      {
+        id: 'notify',
+        name: 'incident.post',
+        kind: 'write',
+        latencyMs: 200,
+        costMicros: 100,
+        fault: 'timeout_after_write',
+        supportsIdempotency: false,
+      },
+    ],
+  },
+];
+export const BASELINE: Policy = {
+  id: 'baseline',
+  name: 'Blind retry',
+  maxAttempts: 3,
+  backoffMs: 100,
+  timeoutMs: 1500,
+  budgetMs: 15000,
+  validateOutput: false,
+  honorRetryAfter: false,
+  useIdempotency: false,
+  retryPermanent: true,
+  retryAmbiguous: true,
+};
+export const GUARDED: Policy = {
+  id: 'candidate',
+  name: 'Guarded retry',
+  maxAttempts: 3,
+  backoffMs: 600,
+  timeoutMs: 1500,
+  budgetMs: 15000,
+  validateOutput: true,
+  honorRetryAfter: true,
+  useIdempotency: true,
+  retryPermanent: false,
+  retryAmbiguous: false,
+};
+export const DEFAULT_EXPERIMENT: Experiment = {
+  version: 1,
+  scenarioId: 'checkout',
+  seed: 1720,
+  trials: 250,
+  faultRate: 0.35,
+  candidate: { ...GUARDED },
+};
+export function getScenario(id: string): Scenario {
+  const s = SCENARIOS.find((x) => x.id === id);
+  if (!s) throw new Error('Unknown scenario');
+  return s;
+}

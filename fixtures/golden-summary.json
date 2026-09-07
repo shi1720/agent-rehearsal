@@ -1,0 +1,16 @@
+{
+  "baseline": {
+    "safe": 75,
+    "completed": 151,
+    "duplicates": 72,
+    "invalid": 49,
+    "p95Ms": 4988
+  },
+  "candidate": {
+    "safe": 208,
+    "completed": 208,
+    "duplicates": 0,
+    "invalid": 0,
+    "p95Ms": 8779
+  }
+}
