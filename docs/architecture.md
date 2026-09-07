@@ -75,7 +75,7 @@ SDK traces contain actual measured duration and are not byte-identical between r
 - The browser receives only bounded JSON. It never evaluates code or shells out.
 - The hosted Worker serves the app; imports and simulations execute locally in the browser.
 - Trace metadata stays in memory until the tab is cleared or closed. Files selected by the user still exist on their own device.
-- Sharing serializes experiment configuration. It never includes imported trace data. Reopening an evidence bundle recomputes results instead of trusting embedded claims.
+- Sharing serializes experiment configuration and the selected trial number. It never includes imported trace data. Reopening an evidence bundle recomputes results instead of trusting embedded claims.
 
 ## Deployment
 

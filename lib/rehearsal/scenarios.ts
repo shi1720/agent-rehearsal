@@ -2,11 +2,11 @@ import type { Policy, Scenario, Experiment } from './types';
 export const SCENARIOS: Scenario[] = [
   {
     id: 'checkout',
-    name: 'The double-charge trap',
-    eyebrow: 'COMMERCE AGENT',
+    name: 'Checkout payments',
+    eyebrow: 'Duplicate writes',
     icon: 'credit',
     description:
-      'A payment succeeds. The response disappears. Does your agent charge the customer again?',
+      'A four-step checkout with rate limits, timeouts, and malformed receipts. Payment timeouts happen after the charge commits.',
     steps: [
       {
         id: 'search',
@@ -48,11 +48,11 @@ export const SCENARIOS: Scenario[] = [
   },
   {
     id: 'research',
-    name: 'The confident wrong answer',
-    eyebrow: 'RESEARCH AGENT',
+    name: 'Research pipeline',
+    eyebrow: 'Malformed responses',
     icon: 'search',
     description:
-      'Search gets throttled and extraction returns malformed data. A green finish can still be wrong.',
+      'A four-step research workflow with rate-limited search, fetch timeouts, and malformed extraction output.',
     steps: [
       {
         id: 'search',
@@ -94,11 +94,11 @@ export const SCENARIOS: Scenario[] = [
   },
   {
     id: 'devops',
-    name: 'The incident that loops',
-    eyebrow: 'ON-CALL AGENT',
+    name: 'Incident response',
+    eyebrow: 'Permanent errors',
     icon: 'terminal',
     description:
-      'A revoked credential is not a temporary outage. Repeating the same call burns the incident budget.',
+      'An incident workflow with a possible authorization failure and a notification tool that cannot deduplicate repeated writes.',
     steps: [
       {
         id: 'logs',

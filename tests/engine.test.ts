@@ -152,3 +152,14 @@ void test('model invariants across 3 scenarios, 20 seeds and 6 fault rates', () 
             );
         }
 });
+
+void test('evidence bundles preserve a selected pair and reject invalid trial indices', async () => {
+  const { evidenceBundle } = await import('../lib/rehearsal/report');
+  const report = compare(DEFAULT_EXPERIMENT);
+  const bundle = evidenceBundle(report, 249);
+  assert.equal(bundle.example.trial, 249);
+  assert.deepEqual(bundle.example.baseline, report.baseline.runs[249]);
+  assert.deepEqual(bundle.example.candidate, report.candidate.runs[249]);
+  for (const index of [-1, 250, 0.5, NaN, Infinity])
+    assert.throws(() => evidenceBundle(report, index), RangeError);
+});

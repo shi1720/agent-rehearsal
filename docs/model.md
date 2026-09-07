@@ -44,9 +44,9 @@ In real tools, the caller must implement a durable idempotency contract before e
 
 All aggregate figures include every trial. p95 uses nearest-rank selection from whole-workflow virtual durations, including stopped and unsafe workflows. It is not p95 of successful calls alone. Costs are illustrative integer microdollars assigned by the scenario; they are not live vendor pricing or LLM token charges.
 
-The initial timeline deliberately selects the first trial where the baseline duplicates a write and the candidate finishes safely. If none exists, it selects the first improvement in safe completion; otherwise trial zero. This is an **illustrative, selected case**, not an unbiased sample. The arrow controls expose every trial. Evidence bundles describe this selection rule explicitly.
+The initial timeline deliberately selects the first trial where the baseline duplicates a write and the candidate finishes safely. If none exists, it selects the first improvement in safe completion; otherwise trial zero. This is an **illustrative, selected case**, not an unbiased sample. Arrow controls and a trial-number input expose every trial. Shared links preserve the selected trial. The initial selection is disclosed beside the timeline.
 
-The browser exports bounded bundles with aggregates and one labeled representative pair, plus the configuration needed to reproduce all trials. The CLI's optional full report includes every trial and may exceed the browser import limit. It is intended for machine auditing; use the configuration or bounded bundle to reopen an experiment.
+The browser’s **Export results** action creates a bounded bundle with all aggregates, the currently inspected pair, and the configuration needed to reproduce all trials. Trial indices in JSON are zero-based; the interface displays one-based numbers. Calling `evidenceBundle(report)` without a trial index still chooses the initial illustrative pair. Importing a bundle validates its configuration and recomputes results, starting from the initial example rather than trusting embedded metrics or trace claims. The CLI's optional full report includes every trial and may exceed the browser import limit. It is intended for machine auditing; use the configuration or bounded bundle to reopen an experiment.
 
 ## Limits
 

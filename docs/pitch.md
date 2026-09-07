@@ -10,9 +10,9 @@ A tool error is not a complete account of what happened. A payment can commit be
 
 ## The product
 
-The browser lab makes failure semantics tangible in a minute. A Python wrapper brings the same vocabulary to a developer's own tools. A portable trace and evidence bundle make the result reviewable. A CLI and behavioral regression turn the investigation into a repeatable gate.
+The simulator compares retry policies under a published, deterministic failure model. A Python SDK records calls and injects controlled faults into test tools. Exported traces and experiment reports make the evidence reviewable; the CLI can enforce explicit regression thresholds in CI.
 
-The distinctive wedge is small and useful: a local-first developer workflow that requires no provider key, hosted trace store, or framework migration. It does not attempt to replace agent frameworks or established observability platforms.
+Developers can try the complete workflow without an API key, hosted trace store, or framework migration. The toolkit works alongside an existing agent framework and can turn a small failure case into a reproducible test.
 
 ## A two-minute demo
 
@@ -38,7 +38,7 @@ This project is evidence of Python/TypeScript engineering. It does not pretend t
 
 ## Portfolio blurb
 
-Built Agent Rehearsal, an open-source chaos testing workbench for agent tool orchestration. Designed a deterministic paired simulator and zero-dependency Python instrumentation SDK, modeled ambiguous writes and idempotent recovery, and shipped local trace analysis with regression gates and documented semantics. The implementation includes adversarial review fixes, Python cancellation tests, and desktop/mobile browser checks.
+Built Agent Rehearsal, an open-source tool-failure testing workbench for agent tool orchestration. Designed a deterministic paired simulator and zero-dependency Python instrumentation SDK, modeled ambiguous writes and idempotent recovery, and shipped local trace analysis with regression gates and documented semantics. The implementation includes adversarial review fixes, Python cancellation tests, and desktop/mobile browser checks.
 
 ## Honest scope
 

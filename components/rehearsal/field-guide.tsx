@@ -1,4 +1,5 @@
 'use client';
+import { CodeExample } from './code-example';
 import {
   ArrowRight,
   GitFork as Github,
@@ -25,16 +26,12 @@ export function FieldGuide() {
     <>
       <section className="page-heading">
         <div>
-          <div className="eyebrow">
-            <span />
-            SMALL SDK. DELIBERATE SEMANTICS.
-          </div>
-          <h1>
-            Make failure <em>reproducible.</em>
-          </h1>
+          <div className="eyebrow">Getting started & model reference</div>
+          <h1>Run your first test</h1>
           <p>
-            A practical toolkit for the space between “the tool returned” and
-            “the task worked.”
+            Run the checkout example, inspect its trace, and learn what the
+            simulator measures. The example needs Python 3.9 or later and makes
+            no external API calls.
           </p>
         </div>
         <a
@@ -44,53 +41,73 @@ export function FieldGuide() {
           rel="noreferrer"
         >
           <Github size={16} />
-          Read the docs
+          Full documentation
         </a>
       </section>
       <div className="guide-grid">
         <section className="panel guide-card">
-          <span className="eyebrow">01 / INSTRUMENT</span>
-          <h2>Your tools. A few extra lines.</h2>
+          <span className="eyebrow">Start with a working example</span>
+          <h2>Reproduce a duplicate charge</h2>
           <p>
-            The Python SDK records timing, fault provenance, and coarse error
-            classes. Arguments, results, and exception messages are never
-            recorded.
+            The example runs a payment function against an in-memory sandbox. It
+            discards the first response after the charge succeeds, then checks
+            both retry implementations.
           </p>
-          <pre>
-            <code>{`from rehearsal import Recorder, FaultPlan\n\nrecorder = Recorder("checkout rehearsal")\n\n@recorder.tool(kind="write", faults=FaultPlan(\n    {1: "timeout_after_write"}\n))\ndef charge():\n    return sandbox_payment.charge()\n\n# Run against a test double or sandbox.\ntry:\n    charge()\nexcept TimeoutError:\n    pass  # Verify before retrying a write.\n\nrecorder.export("trace.json")`}</code>
-          </pre>
+          <CodeExample name="checkout commands">{`git clone https://github.com/shi1720/agent-rehearsal.git
+cd agent-rehearsal
+python3 examples/checkout.py`}</CodeExample>
+          <p>
+            <strong>Expected result:</strong> blind retry creates two charges;
+            using a stable operation key creates one. The script asserts both
+            outcomes and saves <code>trace.json</code>.
+          </p>
+          <p className="install-note">
+            Open Trace inspector and import trace.json to review the four
+            recorded calls. To instrument your own code, install the SDK in a
+            virtual environment:
+          </p>
+          <CodeExample name="SDK installation commands">{`python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install ./sdk`}</CodeExample>
+          <p className="install-note">
+            Commands above use a macOS or Linux shell. In Windows Command
+            Prompt, use <code>.venv\Scripts\activate.bat</code>. Tool arguments,
+            results, and exception messages are omitted from SDK traces. Choose
+            tool and trace names that contain no secrets.
+          </p>
           <a href={`${REPO}/tree/main/sdk`} target="_blank" rel="noreferrer">
-            Explore the zero-dependency SDK
+            Read the SDK usage and guarantees
             <ArrowRight size={16} />
           </a>
         </section>
         <section className="panel guide-card">
-          <span className="eyebrow">02 / UNDERSTAND</span>
-          <h2>What the lab actually measures.</h2>
+          <span className="eyebrow">Before interpreting the numbers</span>
+          <h2>What the simulator measures.</h2>
           <dl>
-            <dt>Paired, deterministic experiments</dt>
+            <dt>Two policies, matched trials</dt>
             <dd>
               Both policies see faults keyed by seed, trial, tool, and attempt.
               Extra retries never shift another tool’s random sequence.
             </dd>
-            <dt>Meaningful success criteria</dt>
+            <dt>Safe completion in this model</dt>
             <dd>
               Safe completion requires a finished workflow, no duplicate
               effects, and no accepted malformed output. Stopping can be the
               right decision.
             </dd>
-            <dt>A bounded model, honestly labeled</dt>
+            <dt>Fixed workflows and known faults</dt>
             <dd>
-              The lab simulates a fixed sequence of tools, not an LLM’s
-              reasoning. Fault probability applies independently to each
-              eligible attempt, except persistent authorization failures and
-              cooldowns.
+              Each scenario models a fixed sequence of tools. It does not run an
+              LLM or judge the quality of an answer. Fault probability applies
+              independently to each eligible attempt, except persistent
+              authorization failures and cooldowns.
             </dd>
-            <dt>Known costs and deadlines</dt>
+            <dt>Simulated time and deadlines</dt>
             <dd>
-              Every attempted call has a configured latency and illustrative
-              cost. Backoff consumes the time budget. Timeout events use a 1,500
-              ms virtual timeout by default.
+              Calls and retry delays consume a shared time budget. The default
+              call timeout is 1,500 ms. The p95 includes workflows that stopped;
+              a shorter duration can reflect earlier failure. Call costs in
+              exported reports are illustrative.
             </dd>
           </dl>
         </section>
@@ -99,9 +116,9 @@ export function FieldGuide() {
         <div className="panel-heading">
           <h2>
             <Workflow size={18} />
-            Two paths. One failure vocabulary.
+            How the components fit together
           </h2>
-          <span className="tiny-tag">ARCHITECTURE</span>
+          <span className="tiny-tag">System architecture</span>
         </div>
         <div className="architecture-flow">
           <div>
@@ -149,7 +166,7 @@ export function FieldGuide() {
       <section className="panel policy-table">
         <div className="panel-heading">
           <h2>Compare the default policies</h2>
-          <span className="tiny-tag">INSPECTABLE BY DESIGN</span>
+          <span className="tiny-tag">Defaults · editable in the simulator</span>
         </div>
         <Table tabIndex={0} aria-label="Scrollable data table">
           <TableHeader>
@@ -168,13 +185,18 @@ export function FieldGuide() {
                 '600 ms exponential + jitter',
               ],
               ['Rate limits', 'Ignores Retry-After', 'Honors Retry-After'],
-              ['Malformed output', 'Accepts as success', 'Rejects and retries'],
+              [
+                'Malformed output',
+                'Accepts as success',
+                'Rejects; retries only when permitted',
+              ],
               ['Permanent error', 'Retries', 'Stops for escalation'],
               [
                 'Ambiguous write',
                 'Retries regardless',
                 'Idempotency contract or stop',
               ],
+              ['Call timeout', '1.5 seconds', '1.5 seconds'],
               ['Total time budget', '15 seconds', '15 seconds'],
             ].map((row) => (
               <TableRow key={row[0]}>
@@ -189,9 +211,10 @@ export function FieldGuide() {
       <div className="guide-note">
         <CircleHelp size={20} />
         <p>
-          Production reliability needs representative workloads and measured
-          tool behavior. Rehearsal makes assumptions visible; it does not
-          certify an agent as safe.{' '}
+          The baseline intentionally omits recovery safeguards so their effects
+          are visible. It is a teaching control, not a comparison with another
+          framework. Validate changes against representative workloads and
+          measured tool behavior before applying them to a live agent.{' '}
           <a
             href={`${REPO}/blob/main/docs/model.md`}
             target="_blank"

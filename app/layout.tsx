@@ -13,14 +13,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Agent Rehearsal — The agent failure lab',
+  title: 'Agent Rehearsal — Tool reliability, examined.',
   description:
-    'Break your agent’s tools before production does. A local-first chaos lab with deterministic policy comparisons and a zero-dependency Python SDK.',
+    'Compare retry policies against reproducible tool failures. Inspect Python tool-call traces locally, with no accounts or API keys.',
   icons: { icon: '/favicon.svg' },
   openGraph: {
-    title: 'Agent Rehearsal — The agent failure lab',
+    title: 'Agent Rehearsal — Tool reliability, examined.',
     description:
-      'Break tools. Compare recovery. Make agent failures reproducible.',
+      'A retry policy simulator and trace inspector for agent developers.',
     type: 'website',
   },
   metadataBase: new URL('https://agent-rehearsal.sg127977958.chatgpt.site'),

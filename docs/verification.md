@@ -22,7 +22,7 @@ CI tests Python 3.9, 3.11, and 3.13 and builds/installs the wheel in each job. T
 
 Playwright exercises desktop Chromium and mobile-emulated Chromium: initial results, attempt inspection, changed settings, scenario switching, validation errors, trace import and clearing, no upload on import, malformed input handling, configuration exports, shared experiment reproduction, navigation, and page overflow.
 
-Axe checks WCAG A/AA rule sets for the lab and loaded trace inspector. This automated scan does not establish complete accessibility conformance. Manual screenshot review and keyboard checks complement it; a real assistive-technology audit remains outside this v1 verification.
+Axe checks WCAG A/AA rule sets for the simulator, loaded trace inspector, and documentation. This automated scan does not establish complete accessibility conformance. Manual screenshot review and keyboard checks complement it; a real assistive-technology audit remains outside this v1 verification.
 
 ## Build and dependencies
 
@@ -40,4 +40,14 @@ See [review-log.md](./review-log.md). All reported release-blocking SDK and engi
 
 ## Release validation (2026-09-07)
 
-Before publication, the local release candidate passed 60 TypeScript tests, 31 Python tests, and 26 desktop/mobile browser checks. The same 26 browser checks also passed against the built Worker running in Wrangler's local production runtime. The wheel and source distribution built in a clean Python 3.9 virtual environment, installed successfully, and validated the example trace through the installed CLI. Production build, strict types, first-party lint, golden aggregate, regression thresholds, and the dependency audit all passed. Public GitHub CI remains the ongoing record for the released commit.
+The original 1.0.0 release candidate passed 60 TypeScript tests, 31 Python tests, and 26 desktop/mobile browser checks. The same 26 browser checks also passed against the built Worker running in Wrangler's local production runtime. The wheel and source distribution built in a clean Python 3.9 virtual environment, installed successfully, and validated the example trace through the installed CLI. Production build, strict types, first-party lint, golden aggregate, regression thresholds, and the dependency audit all passed. Public GitHub CI remains the ongoing record for the released commit.
+
+
+## Interface release — 1.1.0
+
+The 1.1.0 browser release adds regressions for delayed requests, clearing pending imports, long metadata, advanced controls, resize recovery, keyboard navigation, selected-trial reports/shares, manual fault counting, scaled waits, mobile call selection, command copying, and clipboard/network failure recovery. The engine’s golden aggregate and Python SDK version remain unchanged.
+
+Local validation passed **61 TypeScript tests, 31 Python tests, and 56 browser checks** (28 workflows across desktop and mobile Chromium). Strict types, first-party lint, golden aggregate, model-specific CLI gates, production Worker build, and the dependency audit also passed. The review findings and subjective design rubric are recorded in [review-log.md](./review-log.md).
+
+
+The same 56 browser checks also passed against the built Worker in Wrangler’s local production runtime. Separate Firefox and WebKit smoke checks passed simulation, mobile call selection, trace import, finding filters, documentation, and offline simulation, with no page errors. These are smoke checks, not the complete Chromium suite. The published GitHub workflow records the checks for each pushed commit.

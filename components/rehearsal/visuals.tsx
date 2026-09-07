@@ -1,4 +1,5 @@
 'use client';
+import { Fragment } from 'react';
 import { Check } from 'lucide-react';
 import { Switch } from '@/components/ui/switch';
 import type { SimEvent, Summary, Trial } from '@/lib/rehearsal/types';
@@ -100,7 +101,7 @@ export function Waterfall({
         <small>{seconds(run.durationMs)}</small>
       </div>
       <div className="time-axis">
-        <span>TOOL CALL</span>
+        <span>Tool call</span>
         <div>
           <span>0s</span>
           <span>{seconds(maxMs / 2)}</span>
@@ -116,26 +117,30 @@ export function Waterfall({
             {run.events
               .filter((e) => e.stepId === id)
               .map((e) => (
-                <button
-                  key={e.id}
-                  aria-label={`${label}: ${e.tool} attempt ${e.attempt}, ${e.status}`}
-                  className={`event-bar ${e.status === 'ok' ? 'bar-ok' : e.status === 'rate_limit' ? 'bar-warn' : 'bar-error'} ${selected === `${label}:${e.id}` ? 'selected' : ''}`}
-                  style={{
-                    left: `${(e.startMs / maxMs) * 100}%`,
-                    width: `${Math.max((e.durationMs / maxMs) * 100, 1.4)}%`,
-                  }}
-                  title={`${e.tool} · attempt ${e.attempt} · ${e.status}`}
-                  onClick={() => onSelect(e)}
-                >
-                  <span>{e.attempt}</span>
+                <Fragment key={e.id}>
                   {e.waitMs > 0 && (
-                    <i
+                    <span
+                      className="wait-bar"
+                      aria-hidden="true"
                       style={{
-                        width: `${(e.waitMs / Math.max(e.durationMs, 1)) * 100}%`,
+                        left: `${((e.startMs + e.durationMs) / maxMs) * 100}%`,
+                        width: `${(e.waitMs / maxMs) * 100}%`,
                       }}
                     />
                   )}
-                </button>
+                  <button
+                    aria-label={`${label}: ${e.tool} attempt ${e.attempt}, ${e.status}`}
+                    className={`event-bar ${e.status === 'ok' ? 'bar-ok' : e.status === 'rate_limit' ? 'bar-warn' : 'bar-error'} ${selected === `${label}:${e.id}` ? 'selected' : ''}`}
+                    style={{
+                      left: `${(e.startMs / maxMs) * 100}%`,
+                      width: `${Math.max((e.durationMs / maxMs) * 100, 1.4)}%`,
+                    }}
+                    title={`${e.tool} · attempt ${e.attempt} · ${e.status}`}
+                    onClick={() => onSelect(e)}
+                  >
+                    <span>{e.attempt}</span>
+                  </button>
+                </Fragment>
               ))}
           </div>
         </div>

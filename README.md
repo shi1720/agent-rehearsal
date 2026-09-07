@@ -1,21 +1,21 @@
 # Agent Rehearsal
 
-### Give your agent a bad day before your users do.
+A retry policy simulator and Python toolkit for reproducible agent tool failures.
 
 [![CI](https://github.com/shi1720/agent-rehearsal/actions/workflows/ci.yml/badge.svg)](https://github.com/shi1720/agent-rehearsal/actions/workflows/ci.yml)
 [![Python 3.9+](https://img.shields.io/badge/Python-3.9%2B-9acb66)](./sdk)
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-6e9cda)](./lib/rehearsal)
 [![MIT](https://img.shields.io/badge/License-MIT-c0f769)](./LICENSE)
 
-**[Open the failure lab](https://agent-rehearsal.sg127977958.chatgpt.site)** · **[Quickstart](#try-it-in-30-seconds)** · **[Architecture](./docs/architecture.md)** · **[Python SDK](./sdk)**
+**[Open the simulator](https://agent-rehearsal.sg127977958.chatgpt.site)** · **[Quickstart](#run-the-checkout-example)** · **[Architecture](./docs/architecture.md)** · **[Python SDK](./sdk)**
 
-A payment tool charges the customer, then loses its response. Your agent retries. Two charges. One confident “Done.”
+A payment tool can charge a customer and then lose its response. Retrying without an idempotency contract can charge the customer twice. A successful-looking workflow can therefore produce the wrong outcome.
 
-Agent Rehearsal makes failures like this reproducible. It combines a browser-based chaos lab with a small Python SDK for recording and fault-testing real tools. Compare recovery policies, inspect every attempt, and turn the failure into a regression test.
+Agent Rehearsal helps investigate these failures in two ways: compare retry policies in a deterministic browser simulator, or record and inject faults in your own Python test tools. Inspect the evidence, reproduce the failure, and check the correction with an executable regression test.
 
 ![Agent Rehearsal workbench](./docs/assets/workbench.png)
 
-## Try it in 30 seconds
+## Run the checkout example
 
 The executable Python example needs **Python 3.9+ and nothing else**:
 
@@ -36,12 +36,12 @@ This runs real functions against an in-memory payment sandbox, injects a lost re
 
 | You want to… | Use… | What actually runs |
 |---|---|---|
-| Understand recovery tradeoffs | **Chaos lab** | A deterministic model of tool calls in your browser |
+| Understand recovery tradeoffs | **Simulator** | A deterministic model of tool calls in your browser |
 | Inspect your own tool failures | **Python SDK + Trace inspector** | Your functions, then local analysis of exported metadata |
 | Gate a policy change in CI | **Simulation CLI** | The same TypeScript engine used by the browser |
 | Reproduce duplicate side effects | **Checkout regression** | An in-memory tool with a real idempotency implementation |
 
-The lab is **a fixed-workflow simulator, not an LLM benchmark**. It does not claim that changing a policy would cause a real agent to follow the same trajectory. Imported traces are inspected; they are never secretly converted into simulated model performance.
+The lab is **a fixed-workflow simulator, not an LLM benchmark**. It does not claim that changing a policy would cause a real agent to follow the same trajectory. Imported traces are inspected; they are not used to estimate an LLM’s performance.
 
 ## What is included
 
@@ -49,7 +49,7 @@ The lab is **a fixed-workflow simulator, not an LLM benchmark**. It does not cla
 - **Five fault classes:** throttling, pre-call timeout, post-write response loss, malformed output, and persistent authorization failure.
 - **Paired policy experiments:** identical keyed fault samples, exponential backoff with jitter, total deadlines, Retry-After handling, and declared idempotency contracts.
 - **Inspectable outcomes:** safe completion, duplicate writes, malformed results, virtual p95 latency, calls made, and complete attempt timelines.
-- **Portable evidence:** seed/config links, bounded evidence bundles, full CLI reports, and a committed golden aggregate.
+- **Portable evidence:** links that reproduce settings and the selected trial, bounded reports that preserve the inspected pair, full CLI reports, and a committed golden aggregate.
 - **Zero-dependency Python SDK:** sync/async wrappers, scripted or seeded fault injection, opt-in retry helpers, atomic trace export, and validation CLI.
 - **Local trace analysis:** bounded strict import, transparent warning rules, related-event filtering, and fault/error details. No trace uploads or browser persistence.
 
@@ -148,6 +148,6 @@ Fault injection and agent evaluation are established areas. [Toxiproxy](https://
 
 The contribution here is an approachable, inspectable developer loop: **inject → record → inspect → compare → regress**. It complements [RepoGauntlet](https://github.com/shi1720/repo-gauntlet), which validates coding-task environments and graders.
 
-Built by Shivam Gupta with AI-assisted implementation and independent AI review. Design decisions, executable controls, fixes, and limitations are documented. No synthetic adoption, model leaderboard, or invented customer results.
+Built by Shivam Gupta with AI-assisted implementation and independent AI review. The [review log](./docs/review-log.md) records findings, fixes, and subjective design assessments; the tests and CI provide executable verification.
 
 MIT licensed. Dependencies retain their own licenses.
