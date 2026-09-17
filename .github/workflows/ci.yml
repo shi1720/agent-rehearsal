@@ -29,7 +29,7 @@ jobs:
       - run: python -m pip install /tmp/rehearsal-dist/*.whl
       - run: rehearsal /tmp/rehearsal-trace.json
   web:
-    name: Engine, browser, and Worker build
+    name: Engine, browser, and Static build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

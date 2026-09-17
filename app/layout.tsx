@@ -23,7 +23,7 @@ export const metadata: Metadata = {
       'A retry policy simulator and trace inspector for agent developers.',
     type: 'website',
   },
-  metadataBase: new URL('https://agent-rehearsal.sg127977958.chatgpt.site'),
+  metadataBase: new URL('https://agent-rehearsal.web.app'),
 };
 
 export default function RootLayout({

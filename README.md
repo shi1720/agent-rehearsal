@@ -7,7 +7,7 @@ A retry policy simulator and Python toolkit for reproducible agent tool failures
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-6e9cda)](./lib/rehearsal)
 [![MIT](https://img.shields.io/badge/License-MIT-c0f769)](./LICENSE)
 
-**[Open the simulator](https://agent-rehearsal.sg127977958.chatgpt.site)** · **[Quickstart](#run-the-checkout-example)** · **[Architecture](./docs/architecture.md)** · **[Python SDK](./sdk)**
+**[Open the simulator](https://agent-rehearsal.web.app)** · **[Quickstart](#run-the-checkout-example)** · **[Architecture](./docs/architecture.md)** · **[Python SDK](./sdk)**
 
 A payment tool can charge a customer and then lose its response. Retrying without an idempotency contract can charge the customer twice. A successful-looking workflow can therefore produce the wrong outcome.
 
@@ -151,3 +151,7 @@ The contribution here is an approachable, inspectable developer loop: **inject �
 Built by Shivam Gupta with AI-assisted implementation and independent AI review. The [review log](./docs/review-log.md) records findings, fixes, and subjective design assessments; the tests and CI provide executable verification.
 
 MIT licensed. Dependencies retain their own licenses.
+
+## Firebase Hosting
+
+The public website is deployed as a static export on Firebase Hosting. See [build, local preview and deployment](docs/firebase-hosting.md).

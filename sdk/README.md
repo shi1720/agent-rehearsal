@@ -33,7 +33,7 @@ async def create_ticket(fields):
     return await async_client.create_ticket(fields)
 ```
 
-Invoke the wrapped functions normally, await async tools, then `recorder.export("trace.json")`. Open that file in the [local trace inspector](https://agent-rehearsal.sg127977958.chatgpt.site).
+Invoke the wrapped functions normally, await async tools, then `recorder.export("trace.json")`. Open that file in the [local trace inspector](https://agent-rehearsal.web.app).
 
 Recording captures the invocation name, read/write kind, relative start time, duration, status, fault class, coarse error class, and effect state. It does **not** capture arguments, results, headers, tokens, exception messages, or custom exception class names. This is data minimization, not a universal secret scanner: keep secrets out of names you supply.
 

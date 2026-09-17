@@ -49,3 +49,7 @@ test-results/
 trace.json
 report.json
 *.tsbuildinfo
+
+# Firebase local cache
+/.firebase/
+firebase-debug.log*
